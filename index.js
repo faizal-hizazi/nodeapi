@@ -28,7 +28,7 @@ const options = {
       },
     ],
   },
-  apis: ["index.js"], // files containing annotations as above
+  apis: ["*.js"], // files containing annotations as above
 };
 const openapiSpecification = swaggerJsdoc(options);
 mongoose
@@ -39,21 +39,25 @@ mongoose
 // app.use(bodyparser.json());
 // app.use(express.bodyParser());
 // const bodyjson = bodyparser.json();
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 /**
  * @swagger
  * componants:
- *      schemas:
- *         user:
- *           type:
- *             object:
- *             properties:
- *               username:
- *                   type:string
- *               email:
- *                   type:string
- *               password:
- *                   type:string
+ *    schemas:
+ *       user:
+ *         type: object
+ *         properties:
+ *          username:
+ *            type: string
+ *            example: "faizal"
+ *          email:
+ *            type: string
+ *          password:
+ *            type: string
+ *       data:
+ *         type: object
+ *         properties:
+ *          message: string
  */
 /**
  * @swagger
@@ -64,12 +68,16 @@ mongoose
  *       200:
  *         description: Success
  *         content:
- *               application/json
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              items:
+ *               $ref:"#/componants/schemas/data"
  */
 app.get("/", (req, res) => {
   res.status(200).json({ message: "successfull" });
 });
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
@@ -83,10 +91,10 @@ app.use(cors());
 //  *         description: Success
 //  *         content:
 //  *          application/json:
-//  *            schemas:
+//  *            schema:
 //  *              type:object
 //  *                items:
-//  *                  $ref:`#componants/schemas/user`
+//  *                  $ref:`#/componants/schemas/user`
 //  */
 /**
  * @swagger
@@ -94,21 +102,15 @@ app.use(cors());
  *   post:
  *     description: create user api
  *     requestbody:
- *            required: true
- *            content:
- *              application/json:
- *                   schemas:
- *                         $ref:"componants/schemas/user"
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             item:
+ *              $ref:'#componants/schemas/user'
  *     responses:
- *          200:
- *            description: Success
- *            content:
- *              application/json:
- *                   schemas:
- *                     type:
- *                         Object
- *                     items:
- *                         $ref:"#componants/schemas/user"
+ *       200:
+ *         description: Success
  *
  */
 app.use("/api/users", user);
