@@ -94,8 +94,7 @@ app.use(cors());
  *   post:
  *     description: create user api
  *     requestbody:
- *            required:
- *                username:
+ *            required: true
  *            content:
  *              application/json:
  *                   schemas:
