@@ -24,7 +24,7 @@ const options = {
     },
     servers: [
       {
-        api: "http://localhost:8000/",
+        api: "http://localhost:8000",
       },
     ],
   },
@@ -32,7 +32,7 @@ const options = {
 };
 const openapiSpecification = swaggerJsdoc(options);
 mongoose
-  .connect("mongodb://localhost/27017")
+  .connect("mongodb://localhost:27017/user")
   .then(() => console.log("database connected"))
   .catch((err) => console.log(err));
 // app.use(bodyparser.urlencoded({ extended: false }));
@@ -42,13 +42,29 @@ mongoose
 
 /**
  * @swagger
+ * componants:
+ *      schemas:
+ *         user:
+ *           type:
+ *             object:
+ *             properties:
+ *               username:
+ *                   type:string
+ *               email:
+ *                   type:string
+ *               password:
+ *                   type:string
+ */
+/**
+ * @swagger
  * /:
  *    get:
  *     description: Get api
  *     responses:
  *       200:
  *         description: Success
- *
+ *         content:
+ *               application/json
  */
 app.get("/", (req, res) => {
   res.status(200).json({ message: "successfull" });
@@ -57,20 +73,44 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+// /**
+//  * @swagger
+//  * api/users:
+//  *    get:
+//  *     description: Get api
+//  *     responses:
+//  *       200:
+//  *         description: Success
+//  *         content:
+//  *          application/json:
+//  *            schemas:
+//  *              type:object
+//  *                items:
+//  *                  $ref:`#componants/schemas/user`
+//  */
 /**
  * @swagger
- * api/users:
- *    get:
- *     description: Get api
+ * /api/users:
+ *   post:
+ *     description: create user api
+ *     requestbody:
+ *            required:
+ *                username:
+ *            content:
+ *              application/json:
+ *                   schemas:
+ *                         $ref:"componants/schemas/user"
  *     responses:
- *       200:
- *         description: Success
- *         content:
- *          application/json:
- *            schemas:
- *              type:array
- *                items:
- *                  $ref:`#componants/schemas/user`
+ *          200:
+ *            description: Success
+ *            content:
+ *              application/json:
+ *                   schemas:
+ *                     type:
+ *                         Object
+ *                     items:
+ *                         $ref:"#componants/schemas/user"
+ *
  */
 app.use("/api/users", user);
 app.use("/api", sign);
