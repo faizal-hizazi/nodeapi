@@ -43,36 +43,39 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 /**
  * @swagger
  * componants:
- *    schemas:
- *       user:
- *         type: object
- *         properties:
- *          username:
- *            type: string
- *            example: "faizal"
- *          email:
- *            type: string
- *          password:
- *            type: string
- *       data:
- *         type: object
- *         properties:
- *          message: string
+ *  schemas:
+ *   user:
+ *    type: object
+ *    properties:
+ *     username:
+ *      type: string
+ *      example: "faizal"
+ *     email:
+ *      type: string
+ *     password:
+ *      type: string
+ *   data:
+ *    type: object
+ *    properties:
+ *     message:
+ *      type: string
+ *      example: "hii"
+ *
  */
 /**
  * @swagger
  * /:
- *    get:
- *     description: Get api
- *     responses:
- *       200:
- *         description: Success
- *         content:
- *          application/json:
- *            schema:
- *              type: object
- *              items:
- *               $ref:"#/componants/schemas/data"
+ *  get:
+ *   description: Get api
+ *   responses:
+ *    200:
+ *     description: Success
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        items:
+ *         $ref:"#/componants/schemas/data"
  */
 app.get("/", (req, res) => {
   res.status(200).json({ message: "successfull" });
@@ -101,7 +104,7 @@ app.use(cors());
  * /api/users:
  *   post:
  *     description: create user api
- *     requestbody:
+ *     requestBody:
  *       content:
  *         application/json:
  *           schema:
