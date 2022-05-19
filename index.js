@@ -21,14 +21,10 @@ const options = {
     info: {
       title: "Hello World",
       version: "1.0.0",
+      // servers: [{ api: "http://localhost:8000" }],
     },
-    servers: [
-      {
-        api: "http://localhost:8000",
-      },
-    ],
   },
-  apis: ["*.js"], // files containing annotations as above
+  apis: ["index.js"], // files containing annotations as above
 };
 const openapiSpecification = swaggerJsdoc(options);
 mongoose
@@ -49,11 +45,20 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
  *    properties:
  *     username:
  *      type: string
+ *      description: username of the user
  *      example: "faizal"
  *     email:
  *      type: string
+ *      description: email of the user
+ *      example: "faizal@gmail.com"
  *     password:
  *      type: string
+ *      description: password of the user
+ *      example: "1234321"
+ *     resetLink:
+ *      type: string
+ *      description: resetLink of the user
+ *      example: "token"
  *   data:
  *    type: object
  *    properties:
@@ -78,7 +83,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
  *         $ref:"#/componants/schemas/data"
  */
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "successfull" });
+  res.send({ message: "get resonse" });
 });
 
 app.use(express.urlencoded({ extended: true }));
@@ -104,6 +109,11 @@ app.use(cors());
  * /api/users:
  *   post:
  *     description: create user api
+ *     parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        description: body of the user
  *     requestBody:
  *       content:
  *         application/json:
@@ -117,8 +127,74 @@ app.use(cors());
  *
  */
 app.use("/api/users", user);
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     description: login user api
+ *     parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        description: body of the user
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             item:
+ *              $ref:'#componants/schemas/user'
+ *     responses:
+ *       200:
+ *         description: login Success
+ *
+ */
 app.use("/api", sign);
+/**
+ * @swagger
+ * /api/resetpassword:
+ *   post:
+ *     description: forgetpassword user api
+ *     parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        description: body of the user
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             item:
+ *              $ref:'#componants/schemas/user'
+ *     responses:
+ *       200:
+ *         description: Success
+ *
+ */
 app.use("/api", resetpassword);
+/**
+ * @swagger
+ * /api/forgetpassword:
+ *   post:
+ *     description: forgetpassword user api
+ *     parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        description: body of the user
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             item:
+ *              $ref:'#componants/schemas/user'
+ *     responses:
+ *       200:
+ *         description: Success
+ *
+ */
 app.use("/api", forgetpassword);
 app.use("/api/sendsms", sendsms);
 app.listen(8000);

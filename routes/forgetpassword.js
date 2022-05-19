@@ -32,7 +32,7 @@ router.put("/forgetpassword", (req, res) => {
           `,
     };
 
-    return User.updateOne({ resetLink: token }, (err, success) => {
+    return user.updateOne({ resetLink: token }, (err, success) => {
       if (err) {
         return res.status(400).json({
           error: err,
